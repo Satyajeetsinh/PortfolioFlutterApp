@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-import './screens/home.dart';
+import './screens/home_screen.dart';
+import './screens/contact_screen.dart';
+import './screens/login_screen.dart';
+import './screens/message_screen.dart';
+import './screens/profile_screen.dart';
+import './screens/tabs_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,10 +20,19 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Portfolio',
+      title: 'PhotographyPortfolio',
+      theme: ThemeData(
+        primaryColor: Color.fromRGBO(61, 7, 7, 1),
+        accentColor: Colors.amber,
+      ),
       initialRoute: '/',
       routes: {
-        '/': (ctx) => HomeScreen(),
+        '/': (ctx) => TabsScreen(),
+        HomeScreen.routeName: (ctx) => HomeScreen(),
+        ContactScreen.routeName: (ctx) => ContactScreen(),
+        LoginScreen.routeName: (ctx) => LoginScreen(),
+        MessagesScreen.routeName: (ctx) => MessagesScreen(),
+        ProfileScreen.routeName: (ctx) => ProfileScreen(),
       },
     );
   }
