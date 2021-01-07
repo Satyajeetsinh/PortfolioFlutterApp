@@ -47,16 +47,11 @@ class _TabsScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(_pages[_selectedPageIndex]['title']),
         actions: [
-          RaisedButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(MessagesScreen.routeName);
-            },
-            child: Icon(
-              Icons.send,
-              color: Colors.white,
-            ),
-            color: Theme.of(context).primaryColor,
-          )
+          IconButton(
+              icon: Icon(Icons.chat_bubble),
+              onPressed: () {
+                Navigator.of(context).pushNamed(MessagesScreen.routeName);
+              })
         ],
       ),
       drawer: MainDrawer(),

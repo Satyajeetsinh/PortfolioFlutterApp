@@ -7,6 +7,7 @@ import './screens/contact_screen.dart';
 import './screens/login_screen.dart';
 import './screens/message_screen.dart';
 import './screens/profile_screen.dart';
+import './widgets/messages.dart';
 import './screens/tabs_screen.dart';
 
 void main() async {
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
         LoginScreen.routeName: (ctx) => LoginScreen(),
         MessagesScreen.routeName: (ctx) => MessagesScreen(),
         ProfileScreen.routeName: (ctx) => ProfileScreen(),
+        Messages.routeName: (ctx) => Messages(),
       },
     );
   }
