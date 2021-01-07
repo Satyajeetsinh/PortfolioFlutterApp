@@ -72,17 +72,17 @@ class _TabsScreenState extends State<TabsScreen> {
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.home),
-            title: const Text('Home'),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.camera_alt),
-            title: const Text('Add Photo'),
+            label: 'Add Photo',
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.person),
-            title: const Text('Profile'),
+            label: 'Profile',
           ),
         ],
       ),

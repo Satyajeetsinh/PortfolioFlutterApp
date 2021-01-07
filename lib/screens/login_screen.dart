@@ -9,6 +9,18 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      backgroundColor: Colors.blueGrey,
+      body: Center(
+        child: Card(
+          margin: EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

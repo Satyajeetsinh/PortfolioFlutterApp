@@ -25,9 +25,9 @@ class _MyAppState extends State<MyApp> {
         primaryColor: Color.fromRGBO(61, 7, 7, 1),
         accentColor: Colors.amber,
       ),
-      initialRoute: '/',
+      home: LoginScreen(),
       routes: {
-        '/': (ctx) => TabsScreen(),
+        TabsScreen.routeName: (ctx) => TabsScreen(),
         HomeScreen.routeName: (ctx) => HomeScreen(),
         ContactScreen.routeName: (ctx) => ContactScreen(),
         LoginScreen.routeName: (ctx) => LoginScreen(),
