@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'PhotographyPortfolio',
       theme: ThemeData(
-        primaryColor: Color.fromRGBO(61, 7, 7, 1),
+        primaryColor: Colors.blue,
         accentColor: Colors.amber,
       ),
       home: LoginScreen(),
