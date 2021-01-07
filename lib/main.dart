@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import './screens/home_screen.dart';
 import './screens/contact_screen.dart';
@@ -7,7 +9,9 @@ import './screens/message_screen.dart';
 import './screens/profile_screen.dart';
 import './screens/tabs_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -25,7 +29,15 @@ class _MyAppState extends State<MyApp> {
         primaryColor: Colors.blue,
         accentColor: Colors.amber,
       ),
-      home: LoginScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (ctx, userSnapshot) {
+          if (userSnapshot.hasData) {
+            return TabsScreen();
+          }
+          return LoginScreen();
+        },
+      ),
       routes: {
         TabsScreen.routeName: (ctx) => TabsScreen(),
         HomeScreen.routeName: (ctx) => HomeScreen(),

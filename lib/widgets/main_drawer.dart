@@ -1,4 +1,6 @@
+import 'package:PhotographyPortfolio/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MainDrawer extends StatelessWidget {
   Widget bottomListTile(String title, IconData icon, Function tapHandler) {
@@ -30,7 +32,7 @@ class MainDrawer extends StatelessWidget {
             width: double.infinity,
             padding: EdgeInsets.all(20),
             alignment: Alignment.bottomLeft,
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).primaryColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,12 +42,15 @@ class MainDrawer extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.white,
                   ),
                 ),
                 Text(
                   'test@gmail.com',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
                 )
               ],
             ),
@@ -88,9 +93,13 @@ class MainDrawer extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 child: Column(
                   children: <Widget>[
-                    bottomListTile('Log Out', Icons.logout, () {
-                      Navigator.of(context).pushReplacementNamed('/');
-                    })
+                    bottomListTile(
+                      'Log Out',
+                      Icons.logout,
+                      () {
+                        FirebaseAuth.instance.signOut();
+                      },
+                    ),
                   ],
                 ),
               ),
