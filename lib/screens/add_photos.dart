@@ -33,6 +33,7 @@ class _AddPhotosState extends State<AddPhotos> {
     });
   }
 
+  bool _loadingBar = false;
   @override
   Widget build(BuildContext context) {
     void _uploadImage() async {
@@ -57,6 +58,9 @@ class _AddPhotosState extends State<AddPhotos> {
           'currentTime': uploadTime,
           'userId': user.uid,
         });
+        setState(() {
+          _loadingBar = false;
+        });
         Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text('Upload Successful'),
@@ -77,63 +81,70 @@ class _AddPhotosState extends State<AddPhotos> {
     }
 
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.grey),
-                ),
-                child: _storedImage != null
-                    ? Image.file(
-                        _storedImage,
-                        fit: BoxFit.scaleDown,
-                        width: double.infinity,
-                        height: double.infinity,
-                      )
-                    : Text(
-                        'No image selected',
+      body: _loadingBar == false
+          ? Container(
+              padding: EdgeInsets.all(5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.grey),
                       ),
-                alignment: Alignment.center,
+                      child: _storedImage != null
+                          ? Image.file(
+                              _storedImage,
+                              fit: BoxFit.scaleDown,
+                              width: double.infinity,
+                              height: double.infinity,
+                            )
+                          : Text(
+                              'No image selected',
+                            ),
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      FlatButton.icon(
+                        onPressed: _takeCameraPicture,
+                        icon: const Icon(Icons.camera_alt),
+                        label: const Text('Camera'),
+                        //color: Theme.of(context).accentColor,
+                      ),
+                      FlatButton.icon(
+                        onPressed: _takeGalleryPicture,
+                        icon: const Icon(Icons.photo_library),
+                        label: const Text('Gallery'),
+                        //color: Theme.of(context).accentColor,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      setState(() {
+                        _loadingBar = true;
+                      });
+                      _uploadImage();
+                    },
+                    child: const Text('Upload'),
+                    color: Theme.of(context).accentColor,
+                  ),
+                ],
               ),
+            )
+          : Center(
+              child: CircularProgressIndicator(),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                FlatButton.icon(
-                  onPressed: _takeCameraPicture,
-                  icon: const Icon(Icons.camera_alt),
-                  label: const Text('Camera'),
-                  //color: Theme.of(context).accentColor,
-                ),
-                FlatButton.icon(
-                  onPressed: _takeGalleryPicture,
-                  icon: const Icon(Icons.photo_library),
-                  label: const Text('Gallery'),
-                  //color: Theme.of(context).accentColor,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            RaisedButton(
-              onPressed: () {
-                _uploadImage();
-              },
-              child: const Text('Upload'),
-              color: Theme.of(context).accentColor,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

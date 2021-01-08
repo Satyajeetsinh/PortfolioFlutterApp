@@ -30,9 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
         }
-        return snapshot.connectionState == ConnectionState.waiting
-            ? Center(child: CircularProgressIndicator())
-            : _buildList(context, snapshot.data.documents);
+        return _buildList(context, snapshot.data.documents);
       },
     );
   }
@@ -47,54 +45,66 @@ class _HomeScreenState extends State<HomeScreen> {
     final record = Record.fromSnapshot(data);
 
     return Padding(
-      padding: const EdgeInsets.all(5),
-      key: ValueKey(record.userId),
-      child: Container(
+        padding: const EdgeInsets.all(5),
+        key: ValueKey(record.userId),
+        child: Container(
           child: Card(
-        elevation: 5,
-        child: Column(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5),
-                topRight: Radius.circular(5),
-              ),
-              child: Image.network(
-                record.url,
-                fit: BoxFit.scaleDown,
-              ),
-            ),
-            ListTile(
-                title: Text(
-                  record.userName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+            elevation: 5,
+            child: Column(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5),
+                  ),
+                  child: Image.network(
+                    record.url,
+                    loadingBuilder: (
+                      BuildContext context,
+                      Widget child,
+                      ImageChunkEvent loadingProcess,
+                    ) {
+                      if (loadingProcess == null) return child;
+                      return Padding(
+                        padding: EdgeInsets.all(10),
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                    fit: BoxFit.scaleDown,
                   ),
                 ),
-                subtitle: Text(record.currentTime),
-                trailing: FlatButton(
-                  child: Text(
-                    'Profile',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                ListTile(
+                    title: Text(
+                      record.userName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(color: Theme.of(context).accentColor)),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(ProfileScreen.routeName, arguments: {
-                      'id': record.userId,
-                      'name': record.userName,
-                    });
-                  },
-                )),
-          ],
-        ),
-      )),
-    );
+                    subtitle: Text(record.currentTime),
+                    trailing: FlatButton(
+                      child: Text(
+                        'Profile',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side:
+                              BorderSide(color: Theme.of(context).accentColor)),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(ProfileScreen.routeName, arguments: {
+                          'id': record.userId,
+                          'name': record.userName,
+                        });
+                      },
+                    )),
+              ],
+            ),
+          ),
+        ));
   }
 }
 
