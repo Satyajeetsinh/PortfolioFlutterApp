@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Padding(
       padding: const EdgeInsets.all(5),
-      key: ValueKey(record.location),
+      key: ValueKey(record.userId),
       child: Container(
           child: Card(
         elevation: 5,
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
                 title: Text(
-                  record.location,
+                  record.userName,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.of(context)
                         .pushNamed(ProfileScreen.routeName, arguments: {
                       'id': record.userId,
-                      'name': record.location,
+                      'name': record.userName,
                     });
                   },
                 )),
@@ -99,18 +99,18 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class Record {
-  final String location;
+  final String userName;
   final String url;
   final String currentTime;
   final String userId;
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['location'] != null),
+      : assert(map['userName'] != null),
         assert(map['url'] != null),
         assert(map['currentTime'] != null),
         assert(map['userId'] != null),
-        location = map['location'],
+        userName = map['userName'],
         url = map['url'],
         userId = map['userId'],
         currentTime = map['currentTime'];
@@ -119,5 +119,5 @@ class Record {
       : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
   @override
-  String toString() => 'Record<$location:$url:$currentTime:$userId>';
+  String toString() => 'Record<$userName:$url:$currentTime:$userId>';
 }

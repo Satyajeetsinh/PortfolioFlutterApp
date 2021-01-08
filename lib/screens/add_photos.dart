@@ -53,7 +53,7 @@ class _AddPhotosState extends State<AddPhotos> {
             .then((value) => value.data()['username'].toString());
         await FirebaseFirestore.instance.collection('storage').doc().set({
           'url': downloadUrl,
-          'location': userData,
+          'userName': userData,
           'currentTime': uploadTime,
           'userId': user.uid,
         });
