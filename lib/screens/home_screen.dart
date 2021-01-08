@@ -1,7 +1,7 @@
-import './profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import './other_profiles.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home-screen';
@@ -94,11 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           side:
                               BorderSide(color: Theme.of(context).accentColor)),
                       onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed(ProfileScreen.routeName, arguments: {
-                          'id': record.userId,
-                          'name': record.userName,
-                        });
+                        Navigator.of(context).pushNamed(
+                            OtherProfileScreen.routeName,
+                            arguments: {
+                              'id': record.userId,
+                              'name': record.userName,
+                            });
                       },
                     )),
               ],
