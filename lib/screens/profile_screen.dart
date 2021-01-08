@@ -8,9 +8,23 @@ class ProfileScreen extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, String>;
     final id = routeArg['id'];
     final name = routeArg['name'];
+    final removeChar = name.replaceAll(new RegExp(r'[^\w\s]+'), '');
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text(removeChar),
+      ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Text('Description'),
+            Divider(),
+            Container(
+              child: SingleChildScrollView(
+                child: Text('photos'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
