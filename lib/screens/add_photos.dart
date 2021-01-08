@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -38,6 +39,7 @@ class _AddPhotosState extends State<AddPhotos> {
       try {
         final User user = auth.currentUser;
         final time = DateTime.now().toString();
+        final uploadTime = DateFormat.yMMMd().format(DateTime.now()).toString();
         final ref = FirebaseStorage.instance
             .ref()
             .child('user_photos')
@@ -49,6 +51,17 @@ class _AddPhotosState extends State<AddPhotos> {
             .child(user.uid)
             .child(user.uid + ':' + time + '.jpg');
         await secondRef.putFile(_storedImage);
+        final downloadUrl = await ref.getDownloadURL();
+        final userData = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid)
+            .get()
+            .then((value) => value.data()['username'].toString());
+        await FirebaseFirestore.instance.collection('storage').doc().set({
+          'url': downloadUrl,
+          'location': userData,
+          'currentTime': uploadTime
+        });
         Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text('Upload Successful'),
@@ -83,7 +96,7 @@ class _AddPhotosState extends State<AddPhotos> {
                 child: _storedImage != null
                     ? Image.file(
                         _storedImage,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.scaleDown,
                         width: double.infinity,
                         height: double.infinity,
                       )
