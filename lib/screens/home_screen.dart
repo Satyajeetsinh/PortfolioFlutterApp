@@ -1,3 +1,4 @@
+import './profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,20 +54,43 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 5,
         child: Column(
           children: <Widget>[
-            Image.network(
-              record.url,
-              fit: BoxFit.scaleDown,
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
+              child: Image.network(
+                record.url,
+                fit: BoxFit.scaleDown,
+              ),
             ),
             ListTile(
-              title: Text(
-                record.location,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                title: Text(
+                  record.location,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
-              ),
-              subtitle: Text(record.currentTime),
-            )
+                subtitle: Text(record.currentTime),
+                trailing: FlatButton(
+                  child: Text(
+                    'Profile',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color: Theme.of(context).accentColor)),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(ProfileScreen.routeName, arguments: {
+                      'id': record.userId,
+                      'name': record.location,
+                    });
+                  },
+                )),
           ],
         ),
       )),
@@ -78,19 +102,22 @@ class Record {
   final String location;
   final String url;
   final String currentTime;
+  final String userId;
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['location'] != null),
         assert(map['url'] != null),
         assert(map['currentTime'] != null),
+        assert(map['userId'] != null),
         location = map['location'],
         url = map['url'],
+        userId = map['userId'],
         currentTime = map['currentTime'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
   @override
-  String toString() => 'Record<$location:$url:$currentTime>';
+  String toString() => 'Record<$location:$url:$currentTime:$userId>';
 }

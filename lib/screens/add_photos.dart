@@ -45,12 +45,6 @@ class _AddPhotosState extends State<AddPhotos> {
             .child('user_photos')
             .child(user.uid + ':' + time + '.jpg');
         await ref.putFile(_storedImage);
-        final secondRef = FirebaseStorage.instance
-            .ref()
-            .child('second_folder')
-            .child(user.uid)
-            .child(user.uid + ':' + time + '.jpg');
-        await secondRef.putFile(_storedImage);
         final downloadUrl = await ref.getDownloadURL();
         final userData = await FirebaseFirestore.instance
             .collection('Users')
@@ -60,7 +54,8 @@ class _AddPhotosState extends State<AddPhotos> {
         await FirebaseFirestore.instance.collection('storage').doc().set({
           'url': downloadUrl,
           'location': userData,
-          'currentTime': uploadTime
+          'currentTime': uploadTime,
+          'userId': user.uid,
         });
         Scaffold.of(context).showSnackBar(
           SnackBar(
