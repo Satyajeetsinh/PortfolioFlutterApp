@@ -25,7 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('storage').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('storage')
+          .orderBy("currentTime", descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
@@ -52,25 +55,33 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 5,
             child: Column(
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5),
-                    topRight: Radius.circular(5),
-                  ),
-                  child: Image.network(
-                    record.url,
-                    loadingBuilder: (
-                      BuildContext context,
-                      Widget child,
-                      ImageChunkEvent loadingProcess,
-                    ) {
-                      if (loadingProcess == null) return child;
-                      return Padding(
-                        padding: EdgeInsets.all(10),
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                    fit: BoxFit.scaleDown,
+                Container(
+                  color: Colors.grey[100],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      topRight: Radius.circular(5),
+                    ),
+                    child: Image.network(
+                      record.url,
+                      loadingBuilder: (
+                        BuildContext context,
+                        Widget child,
+                        ImageChunkEvent loadingProcess,
+                      ) {
+                        if (loadingProcess == null) return child;
+                        return Padding(
+                          padding: EdgeInsets.all(10),
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                      height: 450,
+                      width: double.infinity,
+                      fit: BoxFit.scaleDown,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Text('Could not download the image, try again');
+                      },
+                    ),
                   ),
                 ),
                 ListTile(
