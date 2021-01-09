@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -61,21 +62,28 @@ class _AddPhotosState extends State<AddPhotos> {
         setState(() {
           _loadingBar = false;
         });
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Upload Successful'),
-          ),
+        Fluttertoast.showToast(
+          msg: 'Photo uploaded',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.SNACKBAR,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          timeInSecForIosWeb: 1,
+          fontSize: 20,
         );
       } catch (err) {
         var message = 'Error, please try again';
         if (err.message != null) {
           message = err.message;
         }
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-            backgroundColor: Theme.of(context).errorColor,
-          ),
+        Fluttertoast.showToast(
+          msg: message,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.SNACKBAR,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          timeInSecForIosWeb: 1,
+          fontSize: 20,
         );
       }
     }

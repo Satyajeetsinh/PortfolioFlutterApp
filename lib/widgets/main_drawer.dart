@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../screens/edit_profile.dart';
+
 class MainDrawer extends StatefulWidget {
   @override
   _MainDrawerState createState() => _MainDrawerState();
@@ -96,7 +98,15 @@ class _MainDrawerState extends State<MainDrawer> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        EditProfileScreen.routeName,
+                        arguments: {
+                          'id': user.uid,
+                          'name': snapshot.data[0],
+                        },
+                      );
+                    },
                   ),
                   ListTile(
                     leading: Icon(Icons.settings),
