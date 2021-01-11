@@ -84,6 +84,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SizedBox(
           height: 20,
         ),
+        Divider(
+          thickness: 10,
+        ),
         StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('uid_photo_storage')
@@ -151,6 +154,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
+                ListTile(
+                  title: Text(
+                    record.userName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  subtitle: Text(record.currentTime),
+                  trailing: FlatButton.icon(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).errorColor,
+                    ),
+                    label: Text(
+                      'Delete',
+                      style: TextStyle(
+                        color: Theme.of(context).errorColor,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
