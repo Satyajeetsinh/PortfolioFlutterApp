@@ -26,7 +26,7 @@ class ProfilePhoto extends StatelessWidget {
           child: ListView(
             children: snapshot.data.docs.map((DocumentSnapshot document) {
               final url = document.data()['profilePhotoUrl'];
-              return url == null && url == ''
+              return url == null
                   ? Center(
                       child: Icon(
                         Icons.person,

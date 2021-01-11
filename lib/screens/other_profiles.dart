@@ -17,6 +17,7 @@ class OtherProfileScreen extends StatelessWidget {
     final name = routeArg['name'];
     final removeChar = name.replaceAll(new RegExp(r'[^\w\s]+'), '');
     final date = routeArg['date'];
+
     Future<void> userDes() async {
       return await FirebaseFirestore.instance
           .collection('Users')
@@ -34,7 +35,13 @@ class OtherProfileScreen extends StatelessWidget {
         children: <Widget>[
           Container(
             child: Flexible(
-              child: _buildBody(context, id, removeChar, date, userDes()),
+              child: _buildBody(
+                context,
+                id,
+                removeChar,
+                date,
+                userDes(),
+              ),
             ),
           ),
         ],
@@ -71,13 +78,17 @@ class OtherProfileScreen extends StatelessWidget {
                 if (user.uid != id)
                   RaisedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        ContactScreen.routeName,
-                        arguments: {
-                          'id': id,
-                          'name': removeChar,
-                        },
-                      );
+                      showModalBottomSheet(
+                          context: ctx,
+                          builder: (_) {
+                            return GestureDetector(
+                              onTap: () {},
+                              child: ContactScreen(
+                                id: id,
+                              ),
+                              behavior: HitTestBehavior.opaque,
+                            );
+                          });
                     },
                     child: Text('Contact'),
                     color: Theme.of(context).accentColor,

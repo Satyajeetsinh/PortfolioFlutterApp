@@ -45,6 +45,16 @@ class _LoginScreenState extends State<LoginScreen> {
           'username': username,
           'email': email,
           'password': password,
+          'description': 'Description',
+          'phone': 'Phone number not available',
+        });
+        await FirebaseFirestore.instance
+            .collection('uid_photo_storage')
+            .doc(authResult.user.uid)
+            .collection('profile_photo')
+            .doc(authResult.user.uid)
+            .set({
+          'profilePhotoUrl': null,
         });
       }
     } on PlatformException catch (err) {
