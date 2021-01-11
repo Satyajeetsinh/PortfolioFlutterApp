@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:intl/intl.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,12 +47,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
         try {
           final User user = auth.currentUser;
-          final time = DateTime.now().toString();
 
           final ref = FirebaseStorage.instance
               .ref()
               .child('profile_pictures')
-              .child(user.uid + ':' + time + '.jpg');
+              .child(user.uid + '.jpg');
           await ref.putFile(_storedImages);
           final downloadUrl = await ref.getDownloadURL();
 
@@ -195,7 +194,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             textColor: Colors.white,
-                          )
+                          ),
                         ],
                       ),
                     ),

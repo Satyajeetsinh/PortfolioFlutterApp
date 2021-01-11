@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SizedBox(
           height: 20,
         ),
-        ProfilePhoto(),
+        ProfilePhoto(user.uid),
         Container(
           child: FutureBuilder(
             future: Future.wait(

@@ -71,7 +71,6 @@ class _AddPhotosState extends State<AddPhotos> {
           'userName': userData,
           'currentTime': uploadTime,
           'userId': user.uid,
-          'profilePhotoUrl': 'hello',
         });
         setState(() {
           _loadingBar = false;

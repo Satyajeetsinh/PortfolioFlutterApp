@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePhoto extends StatefulWidget {
-  @override
-  _ProfilePhotoState createState() => _ProfilePhotoState();
-}
+class ProfilePhoto extends StatelessWidget {
+  final String id;
 
-class _ProfilePhotoState extends State<ProfilePhoto> {
+  ProfilePhoto(this.id);
+
   final User user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -15,7 +14,7 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('uid_photo_storage')
-          .doc(user.uid)
+          .doc(id)
           .collection('profile_photo')
           .snapshots(),
       builder: (context, snapshot) {
@@ -27,7 +26,7 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
           child: ListView(
             children: snapshot.data.docs.map((DocumentSnapshot document) {
               final url = document.data()['profilePhotoUrl'];
-              return url == null
+              return url == null && url == ''
                   ? Center(
                       child: Icon(
                         Icons.person,

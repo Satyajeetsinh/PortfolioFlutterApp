@@ -110,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             arguments: {
                               'id': record.userId,
                               'name': record.userName,
+                              'date': record.currentTime,
                             });
                       },
                     )),
