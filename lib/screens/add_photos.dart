@@ -41,12 +41,14 @@ class _AddPhotosState extends State<AddPhotos> {
       try {
         final User user = auth.currentUser;
         final time = DateTime.now().toString();
-        final uploadTime = DateFormat.yMMMd().format(DateTime.now()).toString();
+        final uploadTime =
+            DateFormat.yMMMd().add_jm().format(DateTime.now()).toString();
         final ref = FirebaseStorage.instance
             .ref()
             .child('user_photos')
             .child(user.uid + ':' + time + '.jpg');
         await ref.putFile(_storedImage);
+
         final downloadUrl = await ref.getDownloadURL();
         final userData = await FirebaseFirestore.instance
             .collection('Users')
@@ -59,6 +61,18 @@ class _AddPhotosState extends State<AddPhotos> {
           'currentTime': uploadTime,
           'userId': user.uid,
         });
+        await FirebaseFirestore.instance
+            .collection('uid_photo_storage')
+            .doc(user.uid)
+            .collection('photos')
+            .doc()
+            .set({
+          'url': downloadUrl,
+          'userName': userData,
+          'currentTime': uploadTime,
+          'userId': user.uid,
+          'profilePhotoUrl': 'hello',
+        });
         setState(() {
           _loadingBar = false;
         });
@@ -69,7 +83,7 @@ class _AddPhotosState extends State<AddPhotos> {
           backgroundColor: Colors.black,
           textColor: Colors.white,
           timeInSecForIosWeb: 1,
-          fontSize: 20,
+          fontSize: 16,
         );
       } catch (err) {
         var message = 'Error, please try again';
@@ -83,7 +97,7 @@ class _AddPhotosState extends State<AddPhotos> {
           backgroundColor: Colors.black,
           textColor: Colors.white,
           timeInSecForIosWeb: 1,
-          fontSize: 20,
+          fontSize: 16,
         );
       }
     }

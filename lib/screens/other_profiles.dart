@@ -26,6 +26,7 @@ class OtherProfileScreen extends StatelessWidget {
                 child: Text('photos'),
               ),
             ),
+            StreamBuilder(builder: null),
           ],
         ),
       ),
