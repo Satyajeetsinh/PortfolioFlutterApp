@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/profile_photo.dart';
+import './contact_screen.dart';
 
 class OtherProfileScreen extends StatelessWidget {
   static const routeName = '/other-profile-screen';
@@ -69,7 +70,15 @@ class OtherProfileScreen extends StatelessWidget {
                 ),
                 if (user.uid != id)
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        ContactScreen.routeName,
+                        arguments: {
+                          'id': id,
+                          'name': removeChar,
+                        },
+                      );
+                    },
                     child: Text('Contact'),
                     color: Theme.of(context).accentColor,
                     shape: RoundedRectangleBorder(
@@ -163,19 +172,6 @@ class OtherProfileScreen extends StatelessWidget {
                     ),
                   ),
                   subtitle: Text(record.currentTime),
-                  trailing: FlatButton.icon(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).errorColor,
-                    ),
-                    label: Text(
-                      'Delete',
-                      style: TextStyle(
-                        color: Theme.of(context).errorColor,
-                      ),
-                    ),
-                  ),
                 )
               ],
             ),

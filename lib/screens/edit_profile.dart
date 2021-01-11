@@ -18,6 +18,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String _userName = '';
   String _userPassword = '';
   String _userDescription = '';
+  String _userPhone = '';
   File _storedImages;
 
   Future<void> _takeGalleryPicture() async {
@@ -73,6 +74,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             'username': _userName,
             'password': _userPassword,
             'description': _userDescription,
+            'phone': _userPhone,
           },
         );
 
@@ -166,6 +168,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                             onSaved: (value) {
                               _userDescription = value;
+                            },
+                          ),
+                          TextFormField(
+                            key: ValueKey('phone'),
+                            validator: (value) {
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Phone number',
+                            ),
+                            onSaved: (value) {
+                              _userPhone = value;
                             },
                           ),
                           TextFormField(
