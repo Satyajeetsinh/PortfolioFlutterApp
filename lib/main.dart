@@ -11,6 +11,7 @@ import './widgets/messages.dart';
 import './screens/tabs_screen.dart';
 import './screens/other_profiles.dart';
 import './screens/edit_profile.dart';
+import './screens/search_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,6 +52,7 @@ class _MyAppState extends State<MyApp> {
         Messages.routeName: (ctx) => Messages(),
         OtherProfileScreen.routeName: (ctx) => OtherProfileScreen(),
         EditProfileScreen.routeName: (ctx) => EditProfileScreen(),
+        SearchScreen.routeName: (ctx) => SearchScreen(),
       },
     );
   }

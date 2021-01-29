@@ -5,6 +5,7 @@ import './profile_screen.dart';
 import '../widgets/main_drawer.dart';
 import './add_photos.dart';
 import './message_screen.dart';
+import './search_screen.dart';
 
 class TabsScreen extends StatefulWidget {
   static const routeName = '/tabs-screen';
@@ -47,11 +48,22 @@ class _TabsScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(_pages[_selectedPageIndex]['title']),
         actions: [
-          IconButton(
-              icon: Icon(Icons.chat_bubble),
-              onPressed: () {
-                Navigator.of(context).pushNamed(MessagesScreen.routeName);
-              })
+          Row(
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(SearchScreen.routeName);
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.chat_bubble),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(MessagesScreen.routeName);
+                },
+              ),
+            ],
+          )
         ],
       ),
       drawer: MainDrawer(),

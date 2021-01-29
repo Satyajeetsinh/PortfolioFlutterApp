@@ -47,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
           'password': password,
           'description': 'Description',
           'phone': 'Phone number not available',
+          'userId': authResult.user.uid,
         });
         await FirebaseFirestore.instance
             .collection('uid_photo_storage')

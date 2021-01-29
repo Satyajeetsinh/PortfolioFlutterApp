@@ -28,7 +28,9 @@ class _AddPhotosState extends State<AddPhotos> {
   Future<void> _takeGalleryPicture() async {
     final imagePickerGallery = ImagePicker();
     final imageFileGallery = await imagePickerGallery.getImage(
-        source: ImageSource.gallery, imageQuality: 85);
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
     setState(() {
       _storedImage = File(imageFileGallery.path);
     });
