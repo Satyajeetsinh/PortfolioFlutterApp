@@ -79,8 +79,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     username.toString() == ('()') ||
                     id.toString() == null ||
                     id.toString() == ('()') ||
-                    email.toString() == null ||
-                    email.toString() == ('()'))
+                    emailId.toString() == null ||
+                    emailId.toString() == ('()'))
                   return Center(
                     child: Text(
                       'User not available',
