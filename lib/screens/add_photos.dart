@@ -19,7 +19,9 @@ class _AddPhotosState extends State<AddPhotos> {
   Future<void> _takeCameraPicture() async {
     final imagePicker = ImagePicker();
     final imageFile = await imagePicker.getImage(
-        source: ImageSource.camera, imageQuality: 85);
+      source: ImageSource.camera,
+      imageQuality: 30,
+    );
     setState(() {
       _storedImage = File(imageFile.path);
     });
@@ -29,7 +31,7 @@ class _AddPhotosState extends State<AddPhotos> {
     final imagePickerGallery = ImagePicker();
     final imageFileGallery = await imagePickerGallery.getImage(
       source: ImageSource.gallery,
-      imageQuality: 50,
+      imageQuality: 30,
     );
     setState(() {
       _storedImage = File(imageFileGallery.path);

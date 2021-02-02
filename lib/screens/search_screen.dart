@@ -10,7 +10,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  String name = 'test';
+  String name = '';
   String userId;
   String displayUserName;
   bool search = false;
@@ -43,95 +43,103 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: search == false
           ? Center(
-              child: Text('Search'),
+              child: Text(
+                'Search Users',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
             )
           : StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('Users')
                   .where('username', isEqualTo: name)
-                  .where('userId')
                   .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.data == null) return CircularProgressIndicator();
-
-                var username = snapshot.data.documents.map<String>(
-                  (doc) {
-                    displayUserName = doc['username'].toString();
-                    return displayUserName;
-                  },
-                );
-
-                var id = snapshot.data.documents.map<String>(
-                  (id) {
-                    userId = id['userId'].toString();
-                    return userId;
-                  },
-                );
-
-                var emailId = snapshot.data.documents.map<String>(
-                  (emailId) {
-                    email = emailId['email'].toString();
-                    return email;
-                  },
-                );
-
-                if (username.toString() == null ||
-                    username.toString() == ('()') ||
-                    id.toString() == null ||
-                    id.toString() == ('()') ||
-                    emailId.toString() == null ||
-                    emailId.toString() == ('()'))
+                if (!snapshot.hasData)
                   return Center(
-                    child: Text(
-                      'User not available',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    child: CircularProgressIndicator(),
                   );
 
-                return ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (ctx, index) {
-                    return Column(
-                      children: <Widget>[
-                        Card(
-                          key: ValueKey(UniqueKey),
-                          elevation: 5,
-                          child: ListTile(
-                            leading: Icon(Icons.person),
-                            title: Text(displayUserName),
-                            subtitle: Text(email),
-                            trailing: FlatButton(
-                              child: Text(
-                                'Profile',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide(
-                                      color: Theme.of(context).accentColor)),
-                              onPressed: () {
-                                Navigator.of(context).pushNamed(
-                                  OtherProfileScreen.routeName,
-                                  arguments: {
-                                    'id': userId,
-                                    'name': displayUserName,
-                                  },
-                                );
-                              },
-                            ),
+                return snapshot.data.documents.toString() == '[]'
+                    ? Center(
+                        child: Text(
+                          'User not available',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                         ),
-                      ],
-                    );
-                  },
-                );
+                      )
+                    : _buildList(context, snapshot.data.documents);
               },
             ),
     );
   }
+
+  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+    return ListView(
+      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+    final record = Record.fromSnapshot(data);
+
+    return Padding(
+      padding: EdgeInsets.all(5),
+      key: ValueKey(record.userId),
+      child: Container(
+        child: Card(
+          elevation: 5,
+          child: ListTile(
+            title: Text(record.username),
+            subtitle: Text(record.email),
+            trailing: FlatButton(
+              child: Text(
+                'Profile',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(color: Theme.of(context).accentColor)),
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  OtherProfileScreen.routeName,
+                  arguments: {
+                    'id': record.userId,
+                    'name': record.username,
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Record {
+  final String username;
+  final String userId;
+  final DocumentReference reference;
+  final String email;
+
+  Record.fromMap(Map<String, dynamic> map, {this.reference})
+      : assert(map['username'] != null),
+        assert(map['userId'] != null),
+        assert(map['email'] != null),
+        username = map['username'],
+        email = map['email'],
+        userId = map['userId'];
+
+  Record.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data(), reference: snapshot.reference);
+
+  @override
+  String toString() => 'Record<$username:$userId:$email>';
 }
