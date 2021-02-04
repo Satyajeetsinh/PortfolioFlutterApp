@@ -93,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .collection('uid_photo_storage')
               .doc(user.uid)
               .collection('photos')
-              .orderBy("currentTime", descending: true)
+              .orderBy("time", descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -209,6 +209,7 @@ class Record {
   final String userName;
   final String url;
   final String currentTime;
+  final String time;
   final String userId;
 
   final DocumentReference reference;
@@ -217,15 +218,17 @@ class Record {
       : assert(map['userName'] != null),
         assert(map['url'] != null),
         assert(map['currentTime'] != null),
+        assert(map['time'] != null),
         assert(map['userId'] != null),
         userName = map['userName'],
         url = map['url'],
         userId = map['userId'],
+        time = map['time'],
         currentTime = map['currentTime'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
   @override
-  String toString() => 'Record<$userName:$url:$currentTime:$userId>';
+  String toString() => 'Record<$userName:$url:$currentTime:$userId:$time>';
 }
