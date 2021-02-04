@@ -64,6 +64,7 @@ class _AddPhotosState extends State<AddPhotos> {
           'userName': userData,
           'currentTime': uploadTime,
           'userId': user.uid,
+          'time': time,
         });
         await FirebaseFirestore.instance
             .collection('uid_photo_storage')
@@ -75,6 +76,7 @@ class _AddPhotosState extends State<AddPhotos> {
           'userName': userData,
           'currentTime': uploadTime,
           'userId': user.uid,
+          'time': time,
         });
         setState(() {
           _loadingBar = false;

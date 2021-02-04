@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection('storage')
-          .orderBy("currentTime", descending: true)
+          .orderBy("time", descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -126,6 +126,7 @@ class Record {
   final String url;
   final String currentTime;
   final String userId;
+  final String time;
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
@@ -133,14 +134,16 @@ class Record {
         assert(map['url'] != null),
         assert(map['currentTime'] != null),
         assert(map['userId'] != null),
+        assert(map['time'] != null),
         userName = map['userName'],
         url = map['url'],
         userId = map['userId'],
+        time = map['time'],
         currentTime = map['currentTime'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
   @override
-  String toString() => 'Record<$userName:$url:$currentTime:$userId>';
+  String toString() => 'Record<$userName:$url:$currentTime:$userId:$time>';
 }
