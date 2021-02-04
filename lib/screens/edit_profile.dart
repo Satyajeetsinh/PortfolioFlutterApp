@@ -16,9 +16,9 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   String _userName = '';
-  String _userPassword = '';
   String _userDescription = '';
   String _userPhone = '';
+
   File _storedImages;
 
   Future<void> _takeGalleryPicture() async {
@@ -42,13 +42,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     void _trySubmit() async {
       var isValid = _formKey.currentState.validate();
       FocusScope.of(context).unfocus();
+      final User user = auth.currentUser;
 
       if (isValid) {
         _formKey.currentState.save();
 
         try {
-          final User user = auth.currentUser;
-
           final ref = FirebaseStorage.instance
               .ref()
               .child('profile_pictures')
@@ -64,15 +63,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               .set({
             'profilePhotoUrl': downloadUrl,
           });
+        } catch (err) {
           setState(() {
             _loadingBar = false;
           });
-        } catch (err) {}
+        }
+        setState(() {
+          _loadingBar = false;
+        });
 
         await FirebaseFirestore.instance.collection('Users').doc(id).update(
           {
             'username': _userName,
-            'password': _userPassword,
             'description': _userDescription,
             'phone': _userPhone,
           },
@@ -94,131 +96,115 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         title: Text('Edit Profile'),
       ),
-      body: _loadingBar == false
-          ? Container(
-              padding: EdgeInsets.all(15),
-              child: SingleChildScrollView(
+      body: Container(
+        padding: EdgeInsets.all(15),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              CircleAvatar(
+                maxRadius: 100,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: _storedImages != null
+                    ? Image.file(
+                        _storedImages,
+                        fit: BoxFit.fill,
+                        width: double.infinity,
+                        height: double.infinity,
+                      )
+                    : Icon(
+                        Icons.photo,
+                        color: Colors.white,
+                        size: 100,
+                      ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              FlatButton(
+                onPressed: () {
+                  _takeGalleryPicture();
+                },
+                child: Text('Add Photo'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(
+                    color: Theme.of(context).accentColor,
+                  ),
+                ),
+              ),
+              Form(
+                key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    CircleAvatar(
-                      maxRadius: 100,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: _storedImages != null
-                          ? Image.file(
-                              _storedImages,
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                              height: double.infinity,
-                            )
-                          : Icon(
-                              Icons.photo,
-                              color: Colors.white,
-                              size: 100,
-                            ),
+                    TextFormField(
+                      initialValue: name,
+                      key: ValueKey('username'),
+                      validator: (value) {
+                        if (value.isEmpty ||
+                            value.length < 4 ||
+                            value.contains('admin')) {
+                          return 'short username or keyword not allowed';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                      ),
+                      onSaved: (value) {
+                        _userName = value;
+                      },
+                    ),
+                    TextFormField(
+                      key: ValueKey('description'),
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      validator: (value) {
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Description',
+                      ),
+                      onSaved: (value) {
+                        _userDescription = value;
+                      },
+                    ),
+                    TextFormField(
+                      key: ValueKey('phone'),
+                      validator: (value) {
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Phone number',
+                      ),
+                      onSaved: (value) {
+                        _userPhone = value;
+                      },
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          _loadingBar = true;
-                        });
-                        _takeGalleryPicture();
-                      },
-                      child: Text('Add Photo'),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(
-                          color: Theme.of(context).accentColor,
+                    if (_loadingBar == false)
+                      RaisedButton(
+                        onPressed: () {
+                          setState(() {
+                            _loadingBar = true;
+                          });
+                          _trySubmit();
+                        },
+                        child: Text('Save'),
+                        color: Theme.of(context).accentColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
+                        textColor: Colors.white,
                       ),
-                    ),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          TextFormField(
-                            initialValue: name,
-                            key: ValueKey('username'),
-                            validator: (value) {
-                              if (value.isEmpty ||
-                                  value.length < 4 ||
-                                  value.contains('admin')) {
-                                return 'short username or keyword not allowed';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Username',
-                            ),
-                            onSaved: (value) {
-                              _userName = value;
-                            },
-                          ),
-                          TextFormField(
-                            key: ValueKey('description'),
-                            maxLines: null,
-                            keyboardType: TextInputType.multiline,
-                            validator: (value) {
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Description',
-                            ),
-                            onSaved: (value) {
-                              _userDescription = value;
-                            },
-                          ),
-                          TextFormField(
-                            key: ValueKey('phone'),
-                            validator: (value) {
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Phone number',
-                            ),
-                            onSaved: (value) {
-                              _userPhone = value;
-                            },
-                          ),
-                          TextFormField(
-                            key: ValueKey('password'),
-                            validator: (value) {
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'New Password',
-                            ),
-                            obscureText: true,
-                            onSaved: (value) {
-                              _userPassword = value;
-                            },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          RaisedButton(
-                            onPressed: () {
-                              _trySubmit();
-                            },
-                            child: Text('Save'),
-                            color: Theme.of(context).accentColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            textColor: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
-            )
-          : Center(
-              child: CircularProgressIndicator(),
-            ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

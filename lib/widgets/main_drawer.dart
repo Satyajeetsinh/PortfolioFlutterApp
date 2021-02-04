@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../screens/edit_profile.dart';
 
@@ -117,7 +118,17 @@ class _MainDrawerState extends State<MainDrawer> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Fluttertoast.showToast(
+                        msg: 'Coming Soon',
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.SNACKBAR,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        fontSize: 16,
+                      );
+                    },
                   ),
                 ],
               ),
