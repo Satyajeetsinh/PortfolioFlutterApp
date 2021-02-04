@@ -56,12 +56,6 @@ class _TabsScreenState extends State<TabsScreen> {
                   Navigator.of(context).pushNamed(SearchScreen.routeName);
                 },
               ),
-              IconButton(
-                icon: Icon(Icons.chat_bubble),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(MessagesScreen.routeName);
-                },
-              ),
             ],
           )
         ],

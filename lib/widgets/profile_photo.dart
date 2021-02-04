@@ -40,7 +40,7 @@ class ProfilePhoto extends StatelessWidget {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                           onError: (exception, stackTrace) => Text('Try again'),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.scaleDown,
                           image: NetworkImage(url),
                         ),
                       ),

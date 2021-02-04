@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/profile_photo.dart';
@@ -164,7 +165,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   subtitle: Text(record.currentTime),
                   trailing: FlatButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      FirebaseStorage.instance.refFromURL(record.url).delete();
+                      FirebaseFirestore.instance
+                          .collection('storage')
+                          .where('url', isEqualTo: record.url)
+                          .get()
+                          .then((data) {
+                        data.docs.first.reference.delete();
+                      });
+                      FirebaseFirestore.instance
+                          .collection('uid_photo_storage')
+                          .doc(user.uid)
+                          .collection('photos')
+                          .where('url', isEqualTo: record.url)
+                          .get()
+                          .then((data) {
+                        data.docs.first.reference.delete();
+                      });
+                    },
                     icon: Icon(
                       Icons.delete,
                       color: Theme.of(context).errorColor,
