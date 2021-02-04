@@ -4,7 +4,6 @@ import './home_screen.dart';
 import './profile_screen.dart';
 import '../widgets/main_drawer.dart';
 import './add_photos.dart';
-import './message_screen.dart';
 import './search_screen.dart';
 
 class TabsScreen extends StatefulWidget {
