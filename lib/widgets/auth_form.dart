@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:email_validator/email_validator.dart';
+
 class AuthForm extends StatefulWidget {
   AuthForm(
     this.submitFn,
@@ -70,8 +72,11 @@ class _AuthFormState extends State<AuthForm> {
                         TextFormField(
                           key: ValueKey('email'),
                           validator: (value) {
-                            if (value.isEmpty || !value.contains('@')) {
-                              return 'Please enter a valid text';
+                            bool isValid = EmailValidator.validate(value);
+                            if (value.isEmpty ||
+                                !value.contains('@') ||
+                                !isValid) {
+                              return 'Please enter a valid email';
                             }
                             return null;
                           },
