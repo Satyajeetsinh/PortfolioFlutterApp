@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfileScreen extends StatefulWidget {
   static const routeName = '/edit-profile-screen';
@@ -37,7 +38,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     final id = routeArg['id'];
     final name = routeArg['name'];
-    bool _loadingBar = false;
 
     void _trySubmit() async {
       var isValid = _formKey.currentState.validate();
@@ -46,6 +46,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       if (isValid) {
         _formKey.currentState.save();
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.remove('userName');
+        await preferences.remove('description');
+        preferences.setString('userName', _userName);
+        preferences.setString('description', _userDescription);
 
         try {
           final ref = FirebaseStorage.instance
@@ -63,14 +68,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               .set({
             'profilePhotoUrl': downloadUrl,
           });
-        } catch (err) {
-          setState(() {
-            _loadingBar = false;
-          });
-        }
-        setState(() {
-          _loadingBar = false;
-        });
+        } catch (err) {}
 
         await FirebaseFirestore.instance.collection('Users').doc(id).update(
           {
@@ -140,7 +138,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       initialValue: name,
                       key: ValueKey('username'),
                       validator: (value) {
-                        if (value.isEmpty ||
+                        if (name != 'admin') if (value.isEmpty ||
                             value.length < 4 ||
                             value.contains('admin')) {
                           return 'short username or keyword not allowed';
@@ -183,21 +181,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    if (_loadingBar == false)
-                      RaisedButton(
-                        onPressed: () {
-                          setState(() {
-                            _loadingBar = true;
-                          });
-                          _trySubmit();
-                        },
-                        child: Text('Save'),
-                        color: Theme.of(context).accentColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        textColor: Colors.white,
+                    RaisedButton(
+                      onPressed: () {
+                        _trySubmit();
+                      },
+                      child: Text('Save'),
+                      color: Theme.of(context).accentColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
                       ),
+                      textColor: Colors.white,
+                    ),
                   ],
                 ),
               ),

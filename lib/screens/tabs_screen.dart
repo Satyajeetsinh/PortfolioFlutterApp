@@ -19,11 +19,12 @@ class _TabsScreenState extends State<TabsScreen> {
   List<Map<String, Object>> _pages;
   int _selectedPageIndex = 0;
 
-  setUsernameEmail(String username, String email) async {
+  setUsernameEmail(String username, String email, String description) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     preferences.setString('userName', username);
     preferences.setString('email', email);
+    preferences.setString('description', description);
   }
 
   @override
@@ -58,7 +59,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
     Future<void> userName() async {
       return await FirebaseFirestore.instance
-          .collection('users')
+          .collection('Users')
           .doc(user.uid)
           .get()
           .then((value) => value.data()['username'].toString());
@@ -66,19 +67,28 @@ class _TabsScreenState extends State<TabsScreen> {
 
     Future<void> userEmail() async {
       return await FirebaseFirestore.instance
-          .collection('users')
+          .collection('Users')
           .doc(user.uid)
           .get()
           .then((value) => value.data()['email'].toString());
     }
 
+    Future<void> userDes() async {
+      return await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .get()
+          .then((value) => value.data()['description'].toString());
+    }
+
     return FutureBuilder(
-      future: Future.wait([userName(), userEmail()]),
+      future: Future.wait([userName(), userEmail(), userDes()]),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var firstData = snapshot.data[0].toString();
           var secondData = snapshot.data[1].toString();
-          setUsernameEmail(firstData, secondData);
+          var thirdData = snapshot.data[2].toString();
+          setUsernameEmail(firstData, secondData, thirdData);
         }
         return Scaffold(
           appBar: AppBar(

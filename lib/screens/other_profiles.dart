@@ -2,13 +2,35 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/profile_photo.dart';
 import './contact_screen.dart';
 
-class OtherProfileScreen extends StatelessWidget {
+class OtherProfileScreen extends StatefulWidget {
   static const routeName = '/other-profile-screen';
+
+  @override
+  _OtherProfileScreenState createState() => _OtherProfileScreenState();
+}
+
+class _OtherProfileScreenState extends State<OtherProfileScreen> {
   final User user = FirebaseAuth.instance.currentUser;
+  String userName;
+
+  getUsername() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    setState(() {
+      userName = pref.getString('userName');
+    });
+  }
+
+  @override
+  void initState() {
+    getUsername();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +208,7 @@ class OtherProfileScreen extends StatelessWidget {
                     ),
                   ),
                   subtitle: Text(record.currentTime),
-                  trailing: record.userName == 'admin'
+                  trailing: userName == 'admin'
                       ? FlatButton.icon(
                           onPressed: () {
                             FirebaseStorage.instance

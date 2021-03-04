@@ -42,6 +42,12 @@ class _MainDrawerState extends State<MainDrawer> {
   }
 
   @override
+  void initState() {
+    getUsernameEmail();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
     final User user = auth.currentUser;

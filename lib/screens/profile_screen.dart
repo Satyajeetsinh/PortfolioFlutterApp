@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/profile_photo.dart';
 
@@ -14,21 +15,24 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final User user = FirebaseAuth.instance.currentUser;
+  String userName;
+  String emailId;
+  String description;
 
-  Future<void> userName() async {
-    return await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(user.uid)
-        .get()
-        .then((value) => value.data()['username'].toString());
+  getUsernameEmail() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    setState(() {
+      userName = pref.getString('userName');
+      emailId = pref.getString('email');
+      description = pref.getString('description');
+    });
   }
 
-  Future<void> userDes() async {
-    return await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(user.uid)
-        .get()
-        .then((value) => value.data()['description'].toString());
+  @override
+  void initState() {
+    getUsernameEmail();
+    super.initState();
   }
 
   @override
@@ -54,32 +58,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         ProfilePhoto(user.uid),
         Container(
-          child: FutureBuilder(
-            future: Future.wait(
-              [
-                userName(),
-                userDes(),
-              ],
-            ),
-            builder: (ctx, futureSnapshot) => Column(
-              children: <Widget>[
-                Text(
-                  futureSnapshot.hasData ? futureSnapshot.data[0] : 'Name',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
+          child: Column(
+            children: <Widget>[
+              Text(
+                userName != null ? userName : 'Name',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(
-                  futureSnapshot.hasData
-                      ? futureSnapshot.data[1]
-                      : 'Description',
-                  style: TextStyle(
-                    fontSize: 17,
-                  ),
+              ),
+              Text(
+                description != null ? description : 'Description',
+                style: TextStyle(
+                  fontSize: 17,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         SizedBox(
