@@ -33,6 +33,7 @@ dependencies:
   fluttertoast: ^7.1.6
   url_launcher: ^5.7.10
   email_validator: '^1.0.5'
+  shared_preferences: ^0.5.12+4
 
 
   # The following adds the Cupertino Icons font to your application.

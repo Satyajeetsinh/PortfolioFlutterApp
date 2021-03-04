@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -118,23 +119,25 @@ class OtherProfileScreen extends StatelessWidget {
             if (!snapshot.hasData) {
               return LinearProgressIndicator();
             }
-            return _buildList(context, snapshot.data.documents);
+            return _buildList(context, snapshot.data.documents, id);
           },
         ),
       ],
     );
   }
 
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+  Widget _buildList(
+      BuildContext context, List<DocumentSnapshot> snapshot, String id) {
     return Expanded(
       child: ListView(
         children:
-            snapshot.map((data) => _buildListItem(context, data)).toList(),
+            snapshot.map((data) => _buildListItem(context, data, id)).toList(),
       ),
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+  Widget _buildListItem(
+      BuildContext context, DocumentSnapshot data, String id) {
     final record = Record.fromSnapshot(data);
 
     return Column(
@@ -183,7 +186,42 @@ class OtherProfileScreen extends StatelessWidget {
                     ),
                   ),
                   subtitle: Text(record.currentTime),
-                )
+                  trailing: record.userName == 'admin'
+                      ? FlatButton.icon(
+                          onPressed: () {
+                            FirebaseStorage.instance
+                                .refFromURL(record.url)
+                                .delete();
+                            FirebaseFirestore.instance
+                                .collection('storage')
+                                .where('url', isEqualTo: record.url)
+                                .get()
+                                .then((data) {
+                              data.docs.first.reference.delete();
+                            });
+                            FirebaseFirestore.instance
+                                .collection('uid_photo_storage')
+                                .doc(id)
+                                .collection('photos')
+                                .where('url', isEqualTo: record.url)
+                                .get()
+                                .then((data) {
+                              data.docs.first.reference.delete();
+                            });
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).errorColor,
+                          ),
+                          label: Text(
+                            'Delete',
+                            style: TextStyle(
+                              color: Theme.of(context).errorColor,
+                            ),
+                          ),
+                        )
+                      : Text(''),
+                ),
               ],
             ),
           ),
