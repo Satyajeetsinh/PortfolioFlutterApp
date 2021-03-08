@@ -106,6 +106,7 @@ class _TabsScreenState extends State<TabsScreen> {
               )
             ],
           ),
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
           drawer: MainDrawer(),
           body: _pages[_selectedPageIndex]['page'],
           bottomNavigationBar: BottomNavigationBar(

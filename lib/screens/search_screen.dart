@@ -41,6 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: search == false
           ? Center(
               child: Text(
@@ -48,6 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
+                  color: Theme.of(context).textSelectionColor,
                 ),
               ),
             )
@@ -69,6 +71,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
+                            color: Theme.of(context).textSelectionColor,
                           ),
                         ),
                       )

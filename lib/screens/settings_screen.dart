@@ -1,9 +1,7 @@
 import 'package:PhotographyPortfolio/main.dart';
-import 'package:PhotographyPortfolio/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -274,6 +272,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: Text('Settings'),
       ),
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: Container(
         padding: EdgeInsets.all(15),
         child: Column(

@@ -31,7 +31,17 @@ class _MyAppState extends State<MyApp> {
       title: 'PhotographyPortfolio',
       theme: ThemeData(
         primaryColor: Colors.blue,
+        secondaryHeaderColor: Colors.white,
         accentColor: Colors.amber,
+        brightness: Brightness.light,
+        textSelectionColor: Colors.black,
+      ),
+      darkTheme: ThemeData(
+        primaryColor: Colors.blue,
+        secondaryHeaderColor: Colors.black,
+        accentColor: Colors.amber,
+        brightness: Brightness.dark,
+        textSelectionColor: Colors.white,
       ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),

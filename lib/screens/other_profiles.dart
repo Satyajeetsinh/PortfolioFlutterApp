@@ -53,6 +53,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
       appBar: AppBar(
         title: Text(removeChar),
       ),
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -171,7 +172,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
             child: Column(
               children: <Widget>[
                 Container(
-                  color: Colors.grey[100],
+                  color: Theme.of(context).secondaryHeaderColor,
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(5),

@@ -94,6 +94,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         title: Text('Edit Profile'),
       ),
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: Container(
         padding: EdgeInsets.all(15),
         child: SingleChildScrollView(

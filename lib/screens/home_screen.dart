@@ -15,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: Container(
         child: Column(
           children: <Widget>[Flexible(child: _buildBody(context))],
@@ -56,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: <Widget>[
                 Container(
-                  color: Colors.grey[100],
+                  color: Theme.of(context).secondaryHeaderColor,
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(5),

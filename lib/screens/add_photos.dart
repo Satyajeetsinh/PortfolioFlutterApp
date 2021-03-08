@@ -108,6 +108,7 @@ class _AddPhotosState extends State<AddPhotos> {
     }
 
     return Scaffold(
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: _loadingBar == false
           ? Container(
               padding: EdgeInsets.all(5),
@@ -129,6 +130,9 @@ class _AddPhotosState extends State<AddPhotos> {
                             )
                           : Text(
                               'No image selected',
+                              style: TextStyle(
+                                color: Theme.of(context).textSelectionColor,
+                              ),
                             ),
                       alignment: Alignment.center,
                     ),
